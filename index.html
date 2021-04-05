@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <input type="text" v-model="names" />
+        <p v-if="names.length !=0">Hello, my name is {{ upperCaseNames }}</p>
+        <ul>
+            <li v-for="name in names" @click="clickHandler">{{ name }}</li>
+        </ul>
+    </div>
+</body>
+</html>
