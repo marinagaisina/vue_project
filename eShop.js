@@ -5,7 +5,8 @@ window.onload = () => {
             return {
                 goods: [],
                 filteredGoods: [],
-                searchLine: ''
+                searchLine: '',
+                isSearchHintShown: false
             }
         },
         methods: {
@@ -18,11 +19,10 @@ window.onload = () => {
                     } else if (window.ActiveXObject) {
                         xhr = new ActiveXObject("Microsoft.XMLHTTP");
                     }
-                    xhr.onreadystatechange = function () {
+                    xhr.onreadystatechange = function() {
                         if (xhr.readyState === 4) {
                             if (xhr.status === 200) {
-                                console.log(xhr.responseText+'\n'+xhr.responseXML+'\n'+xhr.status);
-                                //const goods = JSON.parse(xhr.responseText); - передаем в then и там парсим
+                                console.log(xhr.responseText + '\n' + xhr.responseXML + '\n' + xhr.status);
                                 resolve(xhr.responseText);
                             } else {
                                 reject('Error with status code: ', xhr.status);
@@ -30,7 +30,7 @@ window.onload = () => {
                         }
                     }
 
-                    xhr.open(method, url); //the 3rd parameter: true - is a default value, not necessarily to type "true"
+                    xhr.open(method, url);
                     xhr.send();
                 })
             },
@@ -41,25 +41,40 @@ window.onload = () => {
                     product_name: 'Default Item',
                     price: 0
                 }
-                this.makeGETRequest('GET',url)
+                this.makeGETRequest('GET', url)
                     .then((data) => {
                         this.goods = JSON.parse(data);
                         this.filteredGoods = JSON.parse(data);
                         console.log('ok', data);
                     })
-                    .catch((err) => {   //если с сервера данные не загружены, подставляем массив продуктов по умолчанию
+                    .catch((err) => {
                         console.log(err);
                         this.goods = [DEFAULT_PRODUCT];
                         this.filteredGoods = [DEFAULT_PRODUCT];
                     })
-                    // .finally(()=> {
-                    //     this.render();
-                    // })
+                // .finally(()=> {
+                //     this.render();
+                // })
+            },
+            searchHintShow: (event) => {
+                let value = event.target.value;
+                if (event.type === 'click') {
+                    app.isSearchHintShown = true;
+                    return;
+                }
+                if (event.type === 'change') {
+                    app.isSearchHintShown = /^\S/.test(value); //если строка пустая или начинается с пробела, то поиск не выполнится
+                }
+            },
+            filterGoods() {
+                const regexp = new RegExp(this.searchLine, 'i');
+                this.filteredGoods = this.goods.filter( good => regexp.test(good.product_name));
             }
-        },
+        }, //methods() ends
         mounted() {
             const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
             this.fetchGoods(`${API_URL}/catalogData.json`);
         }
     });
+
 }

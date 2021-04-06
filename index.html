@@ -7,21 +7,22 @@
     <script src="eShop.js"></script>
 </head>
 <body>
-    <div id="app">
-        <header>
-            <input type="text" class="goods-search" />
-            <button class="search-button" type="button">Искать</button>
-            <button class="cart-button" type="button">Корзина</button>
-        </header>
-        <main>
-            <div class="goods-list">
-                <div class="goods-item" v-for="good in filteredGoods">
-                    <h3>{{ good.product_name }}</h3>
-                    <p>{{ good.price }}</p>
-                </div>
+<div id="app">
+    <header>
+        <input v-model="searchLine" @click="searchHintShow" @change="searchHintShow" type="text" class="goods-search" />
+        <button @click="filterGoods" class="search-button" type="button">Искать</button>
+        <button class="cart-button" type="button">Корзина</button>
+        <p v-show="isSearchHintShown">{{ `Если строка пустая или начинается с пробела, то поиск не выполнится. Вы ввели: ${searchLine}` }}</p>
+    </header>
+    <main>
+        <div class="goods-list">
+            <div class="goods-item" v-for="good in filteredGoods">
+                <h3>{{ good.product_name }}</h3>
+                <p>{{ good.price }}</p>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
+</div>
 
 </body>
 </html>
