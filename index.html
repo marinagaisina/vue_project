@@ -14,7 +14,12 @@
             <button class="cart-button" type="button">Корзина</button>
         </header>
         <main>
-            <div class="goods-list"></div>
+            <div class="goods-list">
+                <div class="goods-item" v-for="good in filteredGoods">
+                    <h3>{{ good.product_name }}</h3>
+                    <p>{{ good.price }}</p>
+                </div>
+            </div>
         </main>
     </div>
 
