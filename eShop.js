@@ -6,7 +6,16 @@ window.onload = () => {
                 goods: [],
                 filteredGoods: [],
                 searchLine: '',
-                isSearchHintShown: false
+                isSearchHintShown: false,
+                isLoadingBtnShown: true,
+                isDataFound: false,
+                isVisibleCart: false
+            }
+        },
+        computed: {
+            filterGoods() {
+                const regexp = new RegExp(this.searchLine, 'i');
+                return this.filteredGoods = this.goods.filter( good => regexp.test(good.product_name));
             }
         },
         methods: {
@@ -35,40 +44,34 @@ window.onload = () => {
                 })
             },
             fetchGoods(url) {
-                //alert('fetch');
-                const DEFAULT_PRODUCT = {
-                    id_product: 0,
-                    product_name: 'Default Item',
-                    price: 0
-                }
+                // const DEFAULT_PRODUCT = {
+                //     id_product: 0,
+                //     product_name: 'Default Item',
+                //     price: 0
+                // }
                 this.makeGETRequest('GET', url)
                     .then((data) => {
+                        this.isLoadingBtnShown = false;
                         this.goods = JSON.parse(data);
                         this.filteredGoods = JSON.parse(data);
                         console.log('ok', data);
                     })
                     .catch((err) => {
                         console.log(err);
-                        this.goods = [DEFAULT_PRODUCT];
-                        this.filteredGoods = [DEFAULT_PRODUCT];
+                        this.isLoadingBtnShown = false;
+                        this.isDataFound = true;
+                        // this.goods = [DEFAULT_PRODUCT];
+                        // this.filteredGoods = [DEFAULT_PRODUCT];
                     })
                 // .finally(()=> {
                 //     this.render();
                 // })
             },
-            searchHintShow: (event) => {
-                let value = event.target.value;
-                if (event.type === 'click') {
-                    app.isSearchHintShown = true;
-                    return;
-                }
-                if (event.type === 'change') {
-                    app.isSearchHintShown = /^\S/.test(value); //если строка пустая или начинается с пробела, то поиск не выполнится
-                }
+            searchHintShow: (value) => {
+                app.isSearchHintShown = value;  //true or false
             },
-            filterGoods() {
-                const regexp = new RegExp(this.searchLine, 'i');
-                this.filteredGoods = this.goods.filter( good => regexp.test(good.product_name));
+            showCart: (value) => {
+                app.isVisibleCart = value;
             }
         }, //methods() ends
         mounted() {
@@ -78,3 +81,4 @@ window.onload = () => {
     });
 
 }
+
