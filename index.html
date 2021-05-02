@@ -40,9 +40,10 @@
                         Loading...</span>
                 </button>
             </div>
-            <div class="goods-item col card" v-for="good in filteredGoods">
+            <div :id="good.id_product" class="goods-item col card" v-for="good in filteredGoods">
                 <h3>{{ good.product_name }}</h3>
                 <p>{{ good.price }}</p>
+                <button @click="addToCart" class="btn btn-outline-success">Add to cart</button>
             </div>
         </div>
 <!--    Cart Modal Window-->
@@ -52,10 +53,10 @@
                 <table class="cart-list table">
                     <thead class="thead-light">
                     <tr>
-                        <th colspan="3" class="text-center">ITEM</th>
-                        <th>PRICE</th>
-                        <th>QUANTITY</th>
-                        <th colspan="2">TOTAL PRICE</th>
+                        <th scope="row" colspan="3" class="text-center">ITEM</th>
+                        <th scope="col">PRICE</th>
+                        <th scope="col">QUANTITY</th>
+                        <th scope="col" colspan="2">TOTAL PRICE</th>
                     </tr>
                     </thead>
                     <tbody>

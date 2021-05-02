@@ -72,6 +72,9 @@ window.onload = () => {
             },
             showCart: (value) => {
                 app.isVisibleCart = value;
+            },
+            addToCart: (event) => {
+                let elementId = event.target.parentElement.id;
             }
         }, //methods() ends
         mounted() {
